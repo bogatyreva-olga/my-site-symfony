@@ -1,0 +1,31 @@
+.header {
+    height: 100px;
+    align-items: center;
+    background-color: #2b2f34;
+}
+
+.navbar {
+    background-color: #2b2f34;
+    font-size: 20px;
+    height: inherit;
+}
+
+.navbar-nav {
+    width: 80%;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.nav-link {
+    color: #fff;
+}
+
+.nav-item {
+    display: flex;
+    align-items: baseline;
+    color: #ffffff;
+}
+
+.nav-item:hover {
+    color: rgba(255, 255, 255, 0.50);
+}
