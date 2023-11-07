@@ -58,17 +58,17 @@ class QuotesController extends AbstractController
      */
     public function getRandomQuotes(Request $request): JsonResponse
     {
-        $parameterQuote = (int)$request->query->get('excludeId');
+        $excludeId = (int)$request->query->get('excludeId');
 
         $quotes = self::QUOTES;
 
-        if ($parameterQuote > 0) {
-            $quotes = array_filter($quotes, function ($el) use ($parameterQuote) {
-                return $el['id'] !== $parameterQuote;
+        if ($excludeId > 0) {
+            $quotes = array_filter($quotes, function ($el) use ($excludeId) {
+                return $el['id'] !== $excludeId;
             });
         }
-        $randomIndexQuote = rand(0, count($quotes));
+        $randomQuoteIndex = rand(0, count($quotes) - 1);
 
-        return $this->json($quotes[$randomIndexQuote]);
+        return $this->json($quotes[$randomQuoteIndex]);
     }
 }

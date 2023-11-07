@@ -5,6 +5,7 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ColorsController extends AbstractController
@@ -74,8 +75,17 @@ class ColorsController extends AbstractController
     /**
      * @Route("/random-colors")
      */
-    public function getRandomColors(): JsonResponse
+    public function getRandomColors(Request $request): JsonResponse
     {
-        return $this->json(self::COLORS[0]);
+        $colors = self::COLORS;
+        $excludeId = (int)$request->query->get('excludeId');
+        if ($excludeId > 0) {
+            $colors = array_filter($colors, function ($el) use ($excludeId) {
+                return $el['id'] !== $excludeId;
+            });
+        }
+        $randomIndex = rand(0, count($colors) - 1);
+        dump($randomIndex, $colors);
+        return $this->json($colors[$randomIndex]);
     }
 }
