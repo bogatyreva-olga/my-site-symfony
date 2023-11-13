@@ -23,7 +23,6 @@ class MarkdownController extends AbstractController
     /**
      * @Route("/markdown-render")
      */
-
     public function showTextFromTextareaInBlockBelow(Request $request, MarkdownParserInterface $parser): JsonResponse
     {
         $html = $request->request->get('md');
