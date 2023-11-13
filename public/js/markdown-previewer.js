@@ -1,14 +1,14 @@
-<div class="container">
-    <div class="editor-wrap">
-        <div class="toolbar"><i class="fa fa-free-code-camp" title="no-stack-dub-sack">
-        </i>Editor<i class="fa fa-arrows-alt"></i>
-        </div>
-        <textarea id="editor" type="text"></textarea>
-    </div>
-    <div class="preview-wrap">
-        <div class="toolbar"><i class="fa fa-free-code-camp" title="no-stack-dub-sack"></i>Previewer<i
-            class="fa fa-arrows-alt"></i></div>
-        <div id="preview">
-        </div>
-    </div>
-</div>
+function showTextFromTextareaInBlockBelow() {
+    let editor = $('#editor');
+    let preview = $('#preview');
+    editor.on("input", () => {
+        $.post('/markdown-render', {md: editor.val()}, function (data) {
+            preview.empty();
+            preview.append(data.html);
+        });
+    });
+}
+
+$(document).ready(() => {
+    showTextFromTextareaInBlockBelow();
+});
