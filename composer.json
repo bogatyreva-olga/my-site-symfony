@@ -6,8 +6,10 @@
     "require": {
         "php": ">=7.2.5",
         "ext-ctype": "*",
+        "ext-http": "*",
         "ext-iconv": "*",
         "doctrine/annotations": "^2.0",
+        "knplabs/knp-markdown-bundle": "^1.9",
         "symfony/console": "5.4.*",
         "symfony/dotenv": "5.4.*",
         "symfony/flex": "^1.17|^2",
@@ -15,8 +17,9 @@
         "symfony/runtime": "5.4.*",
         "symfony/twig-bundle": "5.4.*",
         "symfony/yaml": "5.4.*",
+        "twig/markdown-extra": "^3.7",
         "twig/twig": "^3.0",
-        "ext-http": "*"
+        "ext-json": "*"
     },
     "require-dev": {
         "symfony/debug-bundle": "5.4.*",
