@@ -27,25 +27,15 @@ function sendFeedbackMessage() {
         categoryId: getCategoryId(),
     };
 
-    $.ajax({
-        url: '/feedback/messages',
-        type: 'post',
-        data: JSON.stringify(data),
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        dataType: 'json',
-        success: function (data) {
-            const filterElement = $("#category-filter");
-            filterElement.val(data.categoryId);
-            console.log(filterElement);
-            updateFeedbackMessagesWithCategoryFilter();
+    $.post('/feedback/messages', data, function (data) {
+        const filterElement = $("#category-filter");
+        filterElement.val(data.categoryId);
+        console.log(filterElement);
+        updateFeedbackMessagesWithCategoryFilter();
 
-            $("#name-user").val('');
-            $('#feedback-message').val('');
-        }
-    });
+        $("#name-user").val('');
+        $('#feedback-message').val('');
+    })
 
     return undefined;
 }
