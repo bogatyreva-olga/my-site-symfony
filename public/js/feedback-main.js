@@ -27,10 +27,9 @@ function sendFeedbackMessage() {
         categoryId: getCategoryId(),
     };
 
-    $.post('/feedback/messages', data, function (data) {
+    $.post('/feedback/messages', data, function (responseData) {
         const filterElement = $("#category-filter");
-        filterElement.val(data.categoryId);
-        console.log(filterElement);
+        filterElement.val(responseData.categoryId);
         updateFeedbackMessagesWithCategoryFilter();
 
         $("#name-user").val('');

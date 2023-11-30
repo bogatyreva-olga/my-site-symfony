@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Model\FeedbackMessage;
+use App\Repository\FeedbackMessageRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,34 +17,26 @@ class FeedbackController extends AbstractController
     /**
      * @Route("/feedback/messages", methods={"GET"})
      */
-    public function getMessages(Request $request): JsonResponse
+    public function getMessagesWithCategory(Request $request, FeedbackMessageRepository $repository): JsonResponse
     {
         $categoryId = (int)$request->query->get("categoryId");
         /*здесь будет код, к-ый будет отфильтровывать массив сообщений по категории, вернуть*/
 
-        return $this->json(["feedbackMessages" => []]);
+        return $this->json(["feedbackMessages" => $repository->getFeedbackMessagesByCategoryId($categoryId)]);
     }
 
     /**
      * @Route("/feedback/messages", methods={"POST"})
      */
-    public function saveMessages(Request $request, Filesystem $filesystem): JsonResponse
+    public function saveMessages(Request $request, FeedbackMessageRepository $repository): JsonResponse
     {
         $userName = $request->request->get('userName');
         $message = $request->request->get('message');
-        $categoryId = $request->request->get('categoryId');
+        $categoryId = (int)$request->request->get('categoryId');
         $fbm = new FeedbackMessage($userName, $message, $categoryId);
-        $messages = [];
-        if ($filesystem->exists('/tmp/fbm.txt')) {
-            $fileContent = file_get_contents('/tmp/fbm.txt');
-            if ($fileContent !== false && $fileContent !== ''){
-                $messages = json_decode($fileContent);
-            }
-        }
+        $messages = $repository->getMessages();
         $messages[] = $fbm;
-        $fbmsJson = json_encode($messages);
-        $filesystem->dumpFile("/tmp/fbm.txt", $fbmsJson);
-        dump($fbmsJson);
+        $repository->persistMessages($messages);
 
         return $this->json($fbm);
     }
@@ -52,17 +44,12 @@ class FeedbackController extends AbstractController
     /**
      * @Route("/feedback-message")
      */
-    public function index(): Response
+    public function index(FeedbackMessageRepository $repository): Response
     {
         return $this->render('feedback-message/feedback-message.html.twig', [
-            'feedbackMessages' => $this->getFeedbackMessagesByCategoryId(),
+            'feedbackMessages' => $repository->getFeedbackMessagesByCategoryId(),
             'categories' => $this->getFeedbackCategories(),
         ]);
-    }
-
-    private function getFeedbackMessagesByCategoryId()
-    {
-
     }
 
     private function getFeedbackCategories(): array
