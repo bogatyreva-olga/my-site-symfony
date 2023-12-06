@@ -20,7 +20,6 @@ class FeedbackController extends AbstractController
     public function getMessagesWithCategory(Request $request, FeedbackMessageRepository $repository): JsonResponse
     {
         $categoryId = (int)$request->query->get("categoryId");
-        /*здесь будет код, к-ый будет отфильтровывать массив сообщений по категории, вернуть*/
 
         return $this->json(["feedbackMessages" => $repository->getFeedbackMessagesByCategoryId($categoryId)]);
     }
@@ -47,7 +46,7 @@ class FeedbackController extends AbstractController
     public function index(FeedbackMessageRepository $repository): Response
     {
         return $this->render('feedback-message/feedback-message.html.twig', [
-            'feedbackMessages' => $repository->getFeedbackMessagesByCategoryId(),
+            'feedbackMessages' => $repository->getMessages(),
             'categories' => $this->getFeedbackCategories(),
         ]);
     }
