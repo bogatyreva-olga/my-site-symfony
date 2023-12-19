@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Service\MarkdownRenderer;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Knp\Bundle\MarkdownBundle\MarkdownParserInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -23,12 +25,11 @@ class MarkdownController extends AbstractController
     /**
      * @Route("/markdown-render")
      */
-
-    public function showTextFromTextareaInBlockBelow(Request $request, MarkdownParserInterface $parser): JsonResponse
+    public function getRenderedMarkdown(Request $request, MarkdownRenderer $renderer, Filesystem $filesystem): JsonResponse
     {
-        $html = $request->request->get('md');
-        $result = $parser->transformMarkdown($html);
-
+        $md = $request->request->get('md');
+        $result = $renderer->render($md);
+        $filesystem->appendToFile("/tmp/md.txt", $result);
         return $this->json(['html' => $result]);
     }
 }
