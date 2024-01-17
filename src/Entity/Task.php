@@ -2,10 +2,12 @@
 
 namespace App\Entity;
 
+use JsonSerializable;
+
 class Task
 {
-    protected string $task;
-    protected $dueDate;
+    public string $task;
+    public $dueDate;
 
     public function getTask(): string
     {
