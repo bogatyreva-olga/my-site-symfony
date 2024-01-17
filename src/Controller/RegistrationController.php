@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Entity\Task;
+use App\Entity\RegistrationUser;
 use App\Form\Type\TaskType;
 use App\Repository\UserSaveRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -18,9 +18,8 @@ class RegistrationController extends AbstractController
      */
     public function showRegistration(): Response
     {
-        $task = new Task();
-        $task->setTask('Write a blog post');
-        $task->setDueDate(new \DateTime('tomorrow'));
+        $task = new RegistrationUser();
+
         $form = $this->createForm(TaskType::class, $task);
 
         return $this->render('registration/registration.html.twig', [
@@ -33,7 +32,7 @@ class RegistrationController extends AbstractController
      */
     public function saveRegistration(Request $request, UserSaveRepository $repository): Response
     {
-        $task = new Task();
+        $task = new RegistrationUser();
         $form = $this->createForm(TaskType::class, $task);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
