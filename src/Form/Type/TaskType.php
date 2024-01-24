@@ -3,6 +3,8 @@
 namespace App\Form\Type;
 
 use App\Entity\RegistrationUser;
+use App\Validator\PasswordConstraint;
+use App\Validator\PasswordConstraintValidator;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -22,38 +24,16 @@ class TaskType extends AbstractType
                 'constraints' => [
                     new NotBlank(),
                     new Email(),
-                    ],
+                ],
             ])
             ->add('password', TextType::class, [
                 'constraints' => [
-                    new NotBlank(),
-                    new Length([
-                        'min' => 6,
-                        'max' => 16,
-                        'minMessage' => 'Your password must be at least 6 characters long',
-                        'maxMessage' => 'Your password cannot be longer than 16 characters',
-                    ]),
-                    new Regex([
-                        'pattern' => '/\d+/',
-                        'match' => true,
-                        'message' => 'Your password must have at least one number']),
-                    new Regex([
-                        'pattern' => '/[A-Z]+/',
-                        'match' => true,
-                        'message' => 'Your password must have at least one uppercase letter']),
-                    new Regex([
-                        'pattern' => '/[a-z]+/',
-                        'match' => true,
-                        'message' => 'Your password must have at least one lowercase letter']),
-                    new Regex([
-                        'pattern' => '/^[a-zA-Z0-9!?]+$/',
-                        'match' => true,
-                        'message' => 'You are entering invalid symbols']),
+                    new PasswordConstraint(),
                 ],
             ])
-            ->add('save', SubmitType::class)
-        ;
+            ->add('save', SubmitType::class);
     }
+
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
